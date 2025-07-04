@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="assets/spotify-icon.png" type="image/png" />
+    <script src="https://unpkg.com/feather-icons"></script>
+    <!-- SEO & Social Meta -->
+    <meta
+      name="description"
+      content="Portfolio Harbangan Panjaitan - Data Science, Machine Learning, Deep Learning."
+    />
+    <meta property="og:title" content="Portfolio | Harbangan Panjaitan" />
+    <meta
+      property="og:description"
+      content="Portfolio Harbangan Panjaitan - Data Science, Machine Learning, Deep Learning."
+    />
+    <meta property="og:image" content="assets/Harr.png" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" aria-label="Sidebar">
+      <a href="#home" class="logo" tabindex="0" aria-label="Homepage">
+        <img
+          src="assets/Spotify.png"
+          alt="Logo Spotify"
+          width="100"
+          height="80"
+        />
+        <span>Har</span>
+      </a>
+      <nav role="navigation" aria-label="Navigasi utama">
+        <ul>
+          <li>
+            <a href="#home" class="nav-link active" aria-current="page">
+              <i data-feather="home"></i><span>Home</span>
+            </a>
+          </li>
+          <li>
+            <a href="#about" class="nav-link">
+              <i data-feather="user"></i><span>About</span>
+            </a>
+          </li>
+          <li>
+            <a href="#projects" class="nav-link">
+              <i data-feather="folder"></i><span>Projects</span>
+            </a>
+          </li>
+          <li>
+            <a href="#skills" class="nav-link">
+              <i data-feather="cpu"></i><span>Skills</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://linkedin.com/in/harbanganpanjaitan"
+              class="nav-link contact-link"
+              rel="noopener noreferrer"
+              aria-label="Contact"
+              target="_blank"
+            >
+              <i data-feather="mail"></i><span>Contact</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <header>
+        <form
+          class="search-bar"
+          role="search"
+          aria-label="Pencarian projek"
+          autocomplete="off"
+          spellcheck="false"
+        >
+          <label for="project-search" class="sr-only">Keyword</label>
+          <input
+            id="project-search"
+            type="search"
+            placeholder="..."
+            aria-label="Search projects by keyword"
+          />
+        </form>
+        <div
+          class="profile"
+          title="Profil Har"
+          tabindex="0"
+          aria-label="Profil Har"
+        >
+          <img src="assets/Harr.png" alt="Avatar Har" width="40" height="40" />
+          <span>Har</span>
+        </div>
+      </header>
+
+      <section id="home" class="section fade-in" tabindex="-1">
+        <h1>Hello, World! <span aria-label="wave" role="img">👋🏽</span></h1>
+        <p>
+          <strong>I’m an informatics engineering student</strong><br />
+          Passionate in <b>Data Science, Machine Learning & Deep Learning</b>
+        </p>
+        <div class="intro-actions">
+          <a href="#projects" class="cta-btn">Lihat Projects</a>
+          <a
+            href="https://www.linkedin.com/in/harbanganpjtn/"
+            class="cta-btn secondary contact-cta"
+            rel="noopener noreferrer"
+            id="contact-cta"
+            target="_blank"
+            >Contact Me</a
+          >
+        </div>
+      </section>
+
+      <section id="about" class="section fade-in" tabindex="-1" hidden>
+        <h2>Here's a quick intro.</h2>
+        <p>
+          Hi! I’m <strong>Harbangan Panjaitan</strong> (you can call me Harr).
+          I’m currently a <b>student of Informatics Engineering</b> at
+          <b>Gunadarma University</b>, focusing on <b>Data Science</b>,
+          <b>Machine Learning</b>, & <b>Deep Learning</b>. I enjoy solving
+          problems, visualizing data, and building intelligent systems based on
+          AI.
+        </p>
+        <ul class="about-list">
+          <li><b>Kampus:</b> Gunadarma University</li>
+          <li><b>Jurusan:</b> Informatics Engineering</li>
+          <li><b>Minat:</b> Data Science, ML, DL, NLP</li>
+        </ul>
+      </section>
+
+      <section
+        id="projects"
+        class="section fade-in"
+        tabindex="-1"
+        hidden
+        aria-live="polite"
+      >
+        <h2>Projects</h2>
+        <div class="project-cards">
+          <!-- Project Card 1 -->
+          <article
+            class="card"
+            tabindex="0"
+            aria-labelledby="project2-title-cnn"
+          >
+            <img
+              src="assets/project1.png"
+              alt="Image Classification with CNN"
+              loading="lazy"
+              width="320"
+              height="180"
+            />
+            <div class="card-content">
+              <h3 id="project2-title-cnn">Image Classification with CNN</h3>
+              <p>
+                Proyek ini melakukan klasifikasi gambar bunga (multi-class)
+                menggunakan
+                <b>Convolutional Neural Network</b> (Keras/TensorFlow). Proses
+                pengembangan model mencakup <i>data augmentation</i> untuk
+                meningkatkan variasi data latih, visualisasi learning curve
+                untuk memantau proses pelatihan, serta analisis performa model
+                menggunakan confusion matrix dan beragam metrik evaluasi seperti
+                akurasi, presisi, dan recall. Hasil akhir menunjukkan model
+                mampu mengenali berbagai jenis bunga secara efektif, serta
+                memberikan insight terhadap kekuatan dan kelemahan model pada
+                masing-masing kelas.
+              </p>
+            </div>
+          </article>
+          <!-- Project Card 2 -->
+          <article
+            class="card"
+            tabindex="0"
+            aria-labelledby="project2-title-qsrank"
+          >
+            <img
+              src="assets/project2.png"
+              alt="QS World University Rankings Data Analysis"
+              loading="lazy"
+              width="320"
+              height="180"
+            />
+            <div class="card-content">
+              <h3 id="project2-title-qsrank">
+                QS World University Rankings Data Analysis
+              </h3>
+              <p>
+                Analisis data
+                <b>QS World University Rankings 2026</b> menggunakan Python.
+                Eksplorasi meliputi pembersihan data, visualisasi
+                <i>heatmap</i> missing value, analisis perubahan peringkat,
+                serta identifikasi universitas dengan lonjakan ranking
+                tertinggi. Ditemukan bahwa <i>overall score</i> sangat
+                memengaruhi peringkat, dengan tren kenaikan signifikan pada
+                universitas di Asia.
+              </p>
+            </div>
+          </article>
+        </div>
+        <div
+          id="no-result-msg"
+          tabindex="-1"
+          style="display: none"
+          aria-live="polite"
+        >
+          Tidak ada project ditemukan.
+        </div>
+      </section>
+
+      <section id="skills" class="section fade-in" tabindex="-1" hidden>
+        <h2>Skills</h2>
+        <ul class="skills-list">
+          <li><b>Languages:</b> Python, SQL</li>
+          <li>
+            <b>Libraries:</b> Pandas, NumPy, Scikit-Learn, Keras, TensorFlow,
+            Matplotlib, Seaborn, NLTK, spaCy
+          </li>
+          <li><b>Deployment:</b> Flask, Streamlit, FastAPI</li>
+          <li><b>Databases:</b> PostgreSQL</li>
+          <li><b>Tools:</b> Git, GitHub, Linux</li>
+        </ul>
+      </section>
+
+      <footer>
+        <div class="footer-content">
+          <span>
+            © 2025 Harbangan Panjaitan.
+            <span style="font-size: 0.95em"> Inspired by Spotify UI.</span>
+          </span>
+        </div>
+      </footer>
+    </main>
+    <script src="script.js" defer></script>
+  </body>
+</html>
