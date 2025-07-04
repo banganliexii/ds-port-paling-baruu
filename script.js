@@ -1,9 +1,22 @@
 // Feather Icons & ARIA setup
-window.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
   window.feather?.replace();
   updateAriaCurrent();
-  showSection(location.hash || "#home");
+  showSection(getCurrentHash());
+  setupKeyboardFocusOutline();
+  setupMobileSidebarToggle();
 });
+
+// Helper: Get current hash or #home (fallback if not found)
+function getCurrentHash() {
+  // only accept valid section hash
+  if (location.hash && document.querySelector(location.hash)) {
+    return location.hash;
+  }
+  // fallback: first visible section, or #home
+  const firstSection = document.querySelector(".section:not([hidden])");
+  return firstSection ? "#" + firstSection.id : "#home";
+}
 
 // Section Show/Hide & Navigation
 function showSection(hash) {
@@ -13,8 +26,8 @@ function showSection(hash) {
   const section = document.querySelector(hash);
   if (section) {
     section.hidden = false;
-    section.focus();
-    window.scrollTo(0, 0);
+    section.focus({ preventScroll: true });
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }
   document
     .querySelectorAll(".nav-link")
@@ -30,7 +43,7 @@ navLinks.forEach((link, i) => {
     const href = this.getAttribute("href");
     if (href?.startsWith("#")) {
       e.preventDefault();
-      window.location.hash = href;
+      if (location.hash !== href) window.location.hash = href;
       showSection(href);
     }
   });
@@ -38,9 +51,7 @@ navLinks.forEach((link, i) => {
     if (["ArrowDown", "ArrowUp"].includes(e.key)) {
       e.preventDefault();
       const dir = e.key === "ArrowDown" ? 1 : -1;
-      let next = i + dir;
-      if (next < 0) next = navLinks.length - 1;
-      if (next >= navLinks.length) next = 0;
+      let next = (i + dir + navLinks.length) % navLinks.length;
       navLinks[next].focus();
     }
     if (e.key === "Enter" || e.key === " ") {
@@ -51,10 +62,10 @@ navLinks.forEach((link, i) => {
 
 // Hashchange = Section Show & ARIA
 window.addEventListener("hashchange", () => {
-  showSection(location.hash || "#home");
+  showSection(getCurrentHash());
   updateAriaCurrent();
-  const target = document.querySelector(location.hash || "#home");
-  if (target) setTimeout(() => target.focus({ preventScroll: true }), 200);
+  const target = document.querySelector(getCurrentHash());
+  if (target) setTimeout(() => target.focus({ preventScroll: true }), 100);
 });
 
 // Aria-current & Sidebar State Helper
@@ -68,7 +79,7 @@ function setAriaCurrent(link, isActive) {
   }
 }
 function updateAriaCurrent() {
-  const hash = location.hash || "#home";
+  const hash = getCurrentHash();
   navLinks.forEach((link) => {
     const isActive = link.getAttribute("href") === hash;
     link.classList.toggle("active", isActive);
@@ -78,7 +89,9 @@ function updateAriaCurrent() {
 
 // Project Search & Accessibility
 const searchInput = document.getElementById("project-search");
-const projectCards = document.querySelectorAll(".project-cards .card");
+const projectCards = Array.from(
+  document.querySelectorAll(".project-cards .card")
+);
 const noResultMsg = document.getElementById("no-result-msg");
 
 function updateCardsTabIndex() {
@@ -109,13 +122,13 @@ function handleProjectSearch() {
   updateCardsTabIndex();
   if (noResultMsg) {
     noResultMsg.style.display = anyVisible ? "none" : "block";
-    if (!anyVisible) setTimeout(() => noResultMsg.focus(), 120);
+    if (!anyVisible) setTimeout(() => noResultMsg.focus(), 100);
   }
   if (anyVisible) {
-    const visibleCard = Array.from(projectCards).find(
+    const visibleCard = projectCards.find(
       (card) => card.style.display !== "none"
     );
-    if (visibleCard) setTimeout(() => visibleCard.focus(), 120);
+    if (visibleCard) setTimeout(() => visibleCard.focus(), 100);
   }
 }
 
@@ -139,11 +152,21 @@ if ("IntersectionObserver" in window) {
 }
 
 // Section Focus Style: Keyboard Only
-const sections = Array.from(document.querySelectorAll("main .section"));
-sections.forEach((section) => {
-  section.addEventListener("focus", () => section.classList.add("focused"));
-  section.addEventListener("blur", () => section.classList.remove("focused"));
-});
+function setupKeyboardFocusOutline() {
+  let keyboardMode = false;
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Tab") keyboardMode = true;
+  });
+  document.addEventListener("mousedown", () => {
+    keyboardMode = false;
+  });
+  document.querySelectorAll("main .section").forEach((section) => {
+    section.addEventListener("focus", () => {
+      if (keyboardMode) section.classList.add("focused");
+    });
+    section.addEventListener("blur", () => section.classList.remove("focused"));
+  });
+}
 
 // Quick search with slash "/"
 window.addEventListener("keydown", (e) => {
@@ -159,15 +182,59 @@ window.addEventListener("keydown", (e) => {
   }
 });
 
-// Mobile: close sidebar if overlayed (future-proofing)
-function closeSidebarOnMobile() {
+// Mobile Sidebar Toggle (future-proof, for better UX)
+function setupMobileSidebarToggle() {
+  // Basic logic: automatically close sidebar on navigation or resize for mobile
+  function closeSidebarOnMobile() {
+    const sidebar = document.querySelector(".sidebar");
+    if (!sidebar) return;
+    if (window.innerWidth < 700 && sidebar.classList.contains("open")) {
+      sidebar.classList.remove("open");
+    }
+  }
+  navLinks.forEach((link) => {
+    link.addEventListener("click", closeSidebarOnMobile);
+  });
+  window.addEventListener("resize", closeSidebarOnMobile);
+
+  // Optionally: add burger menu for mobile if needed (HTML & CSS required)
+  // Uncomment below if you add a burger menu element
+  /*
+  const burger = document.querySelector('.sidebar-burger');
+  if(burger){
+    burger.addEventListener('click', () => {
+      document.querySelector('.sidebar').classList.toggle('open');
+    });
+  }
+  */
+}
+
+// Accessibility: trap focus in sidebar when open (future-proof, optional)
+function trapSidebarFocus() {
   const sidebar = document.querySelector(".sidebar");
-  if (!sidebar) return;
-  if (window.innerWidth < 700 && sidebar.classList.contains("open")) {
+  if (!sidebar || !sidebar.classList.contains("open")) return;
+  const focusable = sidebar.querySelectorAll(
+    'a, button, input, [tabindex="0"]'
+  );
+  let first = focusable[0],
+    last = focusable[focusable.length - 1];
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Tab") return;
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  });
+}
+
+// Optionally, close sidebar when clicking outside (future-proof, optional)
+document.addEventListener("click", (e) => {
+  const sidebar = document.querySelector(".sidebar");
+  if (!sidebar || !sidebar.classList.contains("open")) return;
+  if (!sidebar.contains(e.target)) {
     sidebar.classList.remove("open");
   }
-}
-navLinks.forEach((link) => {
-  link.addEventListener("click", closeSidebarOnMobile);
 });
-window.addEventListener("resize", closeSidebarOnMobile);
